@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc22fb7f2e9f6a24bb40323b220ac499, type: 3}
   m_Name: New Facial Animations Set
   m_EditorClassIdentifier: 
-  Angry: {fileID: 2800000, guid: 4ac48f42e1f97d34db21cf7bc3e65661, type: 3}
-  Dead: {fileID: 2800000, guid: dae3169bd4210ea4882683aa30278164, type: 3}
-  Disgust: {fileID: 2800000, guid: 8ea81123c47609b4ebf450f6a763b9dd, type: 3}
-  Evil: {fileID: 2800000, guid: d45681da77f672d4a928f60180fff6b8, type: 3}
-  Happy: {fileID: 2800000, guid: c36aaa0f55f87aa45b837efd6ead1481, type: 3}
-  Normal: {fileID: 2800000, guid: a69f8daa0624e2e4aadd143684aa4303, type: 3}
-  Surprised: {fileID: 2800000, guid: 9d6f4ba08433f764d9af6ddd27292309, type: 3}
+  Angry: {fileID: 2800000, guid: 696885d096f2bea43bf03e5b3f1da924, type: 3}
+  Dead: {fileID: 2800000, guid: 74f932158c46be5418313059758170ba, type: 3}
+  Disgust: {fileID: 2800000, guid: 0d23c0cf62cba6c4a93afe656bc1309b, type: 3}
+  Evil: {fileID: 2800000, guid: 9858a6d8075baf14cb625beab20f5f93, type: 3}
+  Happy: {fileID: 2800000, guid: 380b21e1632813441a274b4bb5d39ce1, type: 3}
+  Normal: {fileID: 2800000, guid: 77d7c395d290deb4996c3fb40dd9b604, type: 3}
+  Surprised: {fileID: 2800000, guid: 14560bdae7686a5468bbef11909de53b, type: 3}

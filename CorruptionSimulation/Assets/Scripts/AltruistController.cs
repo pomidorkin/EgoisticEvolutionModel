@@ -6,6 +6,7 @@ public class AltruistController : MonoBehaviour
 {
     [SerializeField] GameObject altruistSlimePrefab;
     [SerializeField] PositionManager positionManager;
+    [SerializeField] ChartController chartController;
     public List<AltruistSlime> altruistSlimes;
     private bool allHunted = false;
     private bool allAte = false;
@@ -107,6 +108,7 @@ public class AltruistController : MonoBehaviour
         // Interation end
         if (allTriedReproduce && (iterationIndex < numberOfIterations))
         {
+            chartController.AddDataToChart(altruistSlimes.Count);
             allAte = false;
             allHunted = false;
             allTriedReproduce = false;

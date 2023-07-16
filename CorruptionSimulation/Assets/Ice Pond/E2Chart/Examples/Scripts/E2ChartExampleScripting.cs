@@ -43,7 +43,7 @@ namespace E2C.Demo
             E2ChartData.Series series2 = new E2ChartData.Series();
             series2.name = "Storage";
             series2.dataY = new List<float>();
-            series2.dataY.Add(152.8f);
+            series2.dataY.Add(182.8f);
             series2.dataY.Add(36.5f);
             series2.dataY.Add(98.3f);
             series2.dataY.Add(99.7f);
