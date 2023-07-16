@@ -5,15 +5,17 @@ using UnityEngine;
 public class AltruistController : MonoBehaviour
 {
     [SerializeField] GameObject altruistSlimePrefab;
+    [SerializeField] GameObject egoistSlimePrefab;
     [SerializeField] PositionManager positionManager;
     [SerializeField] ChartController chartController;
-    public List<AltruistSlime> altruistSlimes;
+    public List<SlimeParent> altruistSlimes;
     private bool allHunted = false;
     private bool allAte = false;
     private bool allTriedReproduce = false;
     private bool allSlimesReachedPosition = false;
     private int coffers = 0;
-    public int newSlimesAmount = 0;
+    public int newAltruistSlimesAmount = 0;
+    public int newEgoistSlimesAmount = 0;
 
     [SerializeField] private int numberOfIterations = 20;
     private int iterationIndex = 0;
@@ -41,7 +43,7 @@ public class AltruistController : MonoBehaviour
     public void CheckIfAllHunted()
     {
         allHunted = true;
-        foreach (AltruistSlime slime in altruistSlimes)
+        foreach (SlimeParent slime in altruistSlimes)
         {
             if (!slime.hasHunted)
             {
@@ -58,7 +60,7 @@ public class AltruistController : MonoBehaviour
     public void CheckIfAllHaveEaten()
     {
         allAte = true;
-        foreach (AltruistSlime slime in altruistSlimes)
+        foreach (SlimeParent slime in altruistSlimes)
         {
             if (!slime.hasEaten)
             {
@@ -74,7 +76,7 @@ public class AltruistController : MonoBehaviour
     public bool CheckIfAllReachedPosition(bool isGoingForHumt)
     {
         allSlimesReachedPosition = true;
-        foreach (AltruistSlime slime in altruistSlimes)
+        foreach (SlimeParent slime in altruistSlimes)
         {
             if (!slime.positionReached)
             {
@@ -97,7 +99,7 @@ public class AltruistController : MonoBehaviour
     public void CheckIfAllHaveReproduced()
     {
         allTriedReproduce = true;
-        foreach (AltruistSlime slime in altruistSlimes)
+        foreach (SlimeParent slime in altruistSlimes)
         {
             if (!slime.triedReproduce)
             {
@@ -108,7 +110,20 @@ public class AltruistController : MonoBehaviour
         // Interation end
         if (allTriedReproduce && (iterationIndex < numberOfIterations))
         {
-            chartController.AddDataToChart(altruistSlimes.Count);
+            int altruistSlimeCount = 0;
+            int egoistSlimes = 0;
+            foreach (SlimeParent item in altruistSlimes)
+            {
+                if (item.altruist)
+                {
+                    altruistSlimeCount++;
+                }
+                else
+                {
+                    egoistSlimes++;
+                }
+            }
+            chartController.AddDataToChart(altruistSlimeCount, egoistSlimes);
             allAte = false;
             allHunted = false;
             allTriedReproduce = false;
@@ -119,20 +134,32 @@ public class AltruistController : MonoBehaviour
 
     }
 
-    public void IncreaseSpawningAmount()
+    public void IncreaseSpawningAmount(bool altruist)
     {
-        newSlimesAmount += 1;
+        if (altruist)
+        {
+            newAltruistSlimesAmount += 1;
+        }
+        else
+        {
+            newEgoistSlimesAmount += 1;
+        }
     }
 
     private void SpawnNewSlime()
     {
-        if (newSlimesAmount > 0)
+        if (newAltruistSlimesAmount > 0 || newEgoistSlimesAmount > 0)
         {
-            for (int i = 0; i < newSlimesAmount; i++)
+            for (int i = 0; i < newAltruistSlimesAmount; i++)
             {
                 Instantiate(altruistSlimePrefab, positionManager.GetRandomSpawnPosition(), Quaternion.identity);
             }
-            newSlimesAmount = 0;
+            for (int i = 0; i < newEgoistSlimesAmount; i++)
+            {
+                Instantiate(egoistSlimePrefab, positionManager.GetRandomSpawnPosition(), Quaternion.identity);
+            }
+            newEgoistSlimesAmount = 0;
+            newAltruistSlimesAmount = 0;
         }
     }
 

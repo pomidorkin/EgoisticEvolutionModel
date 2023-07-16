@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class AltruistSlime : MonoBehaviour
+public class EgoistSlime : SlimeParent
 {
     NavMeshAgent agent;
     [SerializeField] AltruistController altruistController;
-    //private int emeraldAmount = 0;
-    public bool hasEaten = false;
+    private int emeraldAmount = 0;
+    /*public bool hasEaten = false;
     private bool isAlive = true;
     public bool hasHunted = false;
-    public bool triedReproduce = false;
+    public bool triedReproduce = false;*/
 
     // Navigation
-    public bool positionReached = false;
+    //public bool positionReached = false;
     private bool goingHunting = false;
 
     // Animation
@@ -33,6 +33,7 @@ public class AltruistSlime : MonoBehaviour
         altruistController.TryReproduceCommand += Reproduce;
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+        altruist = false;
     }
 
     private void AllSlimesReachedDestination()
@@ -82,22 +83,22 @@ public class AltruistSlime : MonoBehaviour
                         }
                         else if (altruistController.CheckIfAllReachedPosition(false))
                         {
-                        altruistController.ResetAllReachedPosition();
-                        altruistController.CheckIfAllHunted();
+                            altruistController.ResetAllReachedPosition();
+                            altruistController.CheckIfAllHunted();
                         }
                     }
-                } 
+                }
             }
         }
     }
 
-    private void Hunt()
+    protected override void Hunt()
     {
         Debug.Log("Setting destination to the agent");
         animator.SetTrigger("Jump");
         goingHunting = true;
         agent.SetDestination(altruistController.GetPositionManager().GetRandomForestPosition());
-        
+
     }
 
     private void DoHuntCalculations()
@@ -108,12 +109,14 @@ public class AltruistSlime : MonoBehaviour
         {
             if (rnd <= 10)
             {
-                altruistController.AddToCoffers(3);
+                //altruistController.AddToCoffers(3);
+                emeraldAmount += 3;
                 Debug.Log("Found 3 emeralds, emerald amount = " + altruistController.GetCoffersAmount());
             }
             else
             {
-                altruistController.AddToCoffers(2);
+                //altruistController.AddToCoffers(2);
+                emeraldAmount += 2;
                 Debug.Log("Found 2 emeralds, emerald amount = " + altruistController.GetCoffersAmount());
             }
         }
@@ -134,10 +137,17 @@ public class AltruistSlime : MonoBehaviour
             Debug.Log("Eating 1 emerald, emerald amount = " + altruistController.GetCoffersAmount());
             altruistController.CheckIfAllHaveEaten();
         }
+        else if((emeraldAmount - 1) > 0)
+        {
+            hasEaten = true;
+            emeraldAmount--;
+            altruistController.CheckIfAllHaveEaten();
+        }
         else
         {
-            isAlive = false;
+            //isAlive = false;
             Debug.Log("Run out of emeralds, die");
+            altruistController.CheckIfAllHaveEaten();
             Die();
         }
     }
@@ -146,8 +156,12 @@ public class AltruistSlime : MonoBehaviour
     {
         if (altruistController.TakeFromCoffers(1))
         {
-            altruistController.IncreaseSpawningAmount();
+            altruistController.IncreaseSpawningAmount(false);
             Debug.Log("Eating 1 more emerald to reproduce, emerald amount = " + altruistController.GetCoffersAmount());
+        }
+        else if ((emeraldAmount - 1) > 0)
+        {
+            altruistController.IncreaseSpawningAmount(false);
         }
         else
         {

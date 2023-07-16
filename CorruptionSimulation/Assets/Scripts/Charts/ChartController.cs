@@ -8,6 +8,7 @@ public class ChartController : MonoBehaviour
     private int day = 0;
     [SerializeField] E2Chart myChart;
     private E2ChartData.Series series1;
+    private E2ChartData.Series series2;
     void Start()
     {
         //Add chart component
@@ -21,6 +22,7 @@ public class ChartController : MonoBehaviour
         myChart.chartOptions.label.enable = true;
         myChart.chartOptions.legend.enable = true;
         myChart.chartOptions.chartStyles.lineChart.enableShade = true;
+        myChart.chartOptions.plotOptions.columnStacking = E2ChartOptions.ColumnStacking.Normal;
         myChart.chartOptions.chartStyles.barChart.barWidth = 15.0f;
         myChart.chartOptions.plotOptions.mouseTracking = E2ChartOptions.MouseTracking.None;
 
@@ -41,11 +43,11 @@ public class ChartController : MonoBehaviour
         series1.dataY.Add(45.9f);
         series1.dataY.Add(87.4f);*/
 
-        /*E2ChartData.Series series2 = new E2ChartData.Series();
-        series2.name = "Storage";
+        series2 = new E2ChartData.Series();
+        series2.name = "Egoist Slimes";
         series2.dataY = new List<float>();
-        series2.dataY.Add(182.8f);
-        series2.dataY.Add(36.5f);
+        series2.dataY.Add(0);
+        /*series2.dataY.Add(36.5f);
         series2.dataY.Add(98.3f);
         series2.dataY.Add(99.7f);
         series2.dataY.Add(36.2f);
@@ -54,16 +56,18 @@ public class ChartController : MonoBehaviour
         //add series into series list
         myChart.chartData.series = new List<E2ChartData.Series>();
         myChart.chartData.series.Add(series1);
+        myChart.chartData.series.Add(series2);
         //myChart.chartData.series.Add(series2);
 
         //update chart
         myChart.UpdateChart();
     }
 
-    public void AddDataToChart(int populationAmount)
+    public void AddDataToChart(int altruistPopulationAmount, int egoistPopulationAmount)
     {
         day++;
-        series1.dataY.Add(populationAmount);
+        series1.dataY.Add(altruistPopulationAmount);
+        series2.dataY.Add(egoistPopulationAmount);
         myChart.chartData.categoriesX.Add("Δενό" + day);
 
         myChart.UpdateChart();
