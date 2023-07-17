@@ -8,6 +8,7 @@ public abstract class SlimeParent : MonoBehaviour
     public bool hasHunted;
     public bool triedReproduce;
     public bool altruist;
+    public bool currupted;
 
     // Navigation
     public bool positionReached;

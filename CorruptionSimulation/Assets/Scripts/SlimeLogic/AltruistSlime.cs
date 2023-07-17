@@ -7,6 +7,7 @@ public class AltruistSlime : SlimeParent
 {
     NavMeshAgent agent;
     [SerializeField] AltruistController altruistController;
+    [SerializeField] GameObject emerald;
     //private int emeraldAmount = 0;
     /*public bool hasEaten = false;
     private bool isAlive = true;
@@ -38,7 +39,6 @@ public class AltruistSlime : SlimeParent
 
     private void AllSlimesReachedDestination()
     {
-        Debug.Log("AllSlimesReachedDestination");
         if (goingHunting)
         {
             goingHunting = false;
@@ -94,7 +94,6 @@ public class AltruistSlime : SlimeParent
 
     protected override void Hunt()
     {
-        Debug.Log("Setting destination to the agent");
         animator.SetTrigger("Jump");
         goingHunting = true;
         agent.SetDestination(altruistController.GetPositionManager().GetRandomForestPosition());
@@ -105,18 +104,22 @@ public class AltruistSlime : SlimeParent
     {
         positionReached = false;
         int rnd = Random.RandomRange(1, 101);
-        if (rnd <= 75)
+        Debug.Log("Max Res Reached (From Slime Script): " + altruistController.resourceManager.MaxResReached());
+        if (rnd <= 75 && (altruistController.resourceManager.MaxResReached() == false))
         {
             if (rnd <= 10)
             {
                 altruistController.AddToCoffers(3);
+                altruistController.resourceManager.IncreaseResourceCounter(3);
                 Debug.Log("Found 3 emeralds, emerald amount = " + altruistController.GetCoffersAmount());
             }
             else
             {
                 altruistController.AddToCoffers(2);
+                altruistController.resourceManager.IncreaseResourceCounter(2);
                 Debug.Log("Found 2 emeralds, emerald amount = " + altruistController.GetCoffersAmount());
             }
+            emerald.SetActive(true);
         }
         else
         {
@@ -129,6 +132,7 @@ public class AltruistSlime : SlimeParent
 
     private void Eat()
     {
+        emerald.SetActive(false);
         if (altruistController.TakeFromCoffers(1))
         {
             hasEaten = true;
@@ -148,7 +152,7 @@ public class AltruistSlime : SlimeParent
     {
         if (altruistController.TakeFromCoffers(1))
         {
-            altruistController.IncreaseSpawningAmount(true);
+            altruistController.IncreaseSpawningAmount(true, false);
             Debug.Log("Eating 1 more emerald to reproduce, emerald amount = " + altruistController.GetCoffersAmount());
         }
         else

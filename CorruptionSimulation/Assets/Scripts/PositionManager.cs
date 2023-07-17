@@ -15,7 +15,6 @@ public class PositionManager : MonoBehaviour
         Vector3 randomDirection = Random.insideUnitSphere * walkRadius;
         randomDirection += forestPosition.position;
         randomDirection.y = yPos;
-        Debug.Log("Randomized Forest position: " + randomDirection);
         return randomDirection;
     }
 
@@ -24,7 +23,6 @@ public class PositionManager : MonoBehaviour
         Vector3 randomDirection = Random.insideUnitSphere * walkRadius;
         randomDirection += homePosition.position;
         randomDirection.y = yPos;
-        Debug.Log("Randomized Home position: " + randomDirection);
         return randomDirection;
     }
 
@@ -33,7 +31,6 @@ public class PositionManager : MonoBehaviour
         Vector3 randomDirection = Random.insideUnitSphere * walkRadius;
         randomDirection += spawnPosition.position;
         randomDirection.y = yPos;
-        Debug.Log("Randomized Home position: " + randomDirection);
         return randomDirection;
     }
 }

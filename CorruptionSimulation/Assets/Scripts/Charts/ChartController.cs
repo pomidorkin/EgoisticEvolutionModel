@@ -9,6 +9,7 @@ public class ChartController : MonoBehaviour
     [SerializeField] E2Chart myChart;
     private E2ChartData.Series series1;
     private E2ChartData.Series series2;
+    private E2ChartData.Series series3;
     void Start()
     {
         //Add chart component
@@ -37,37 +38,34 @@ public class ChartController : MonoBehaviour
         series1.name = "Altruist Slimes";
         series1.dataY = new List<float>();
         series1.dataY.Add(0);
-        /*series1.dataY.Add(95.8f);
-        series1.dataY.Add(53.6f);
-        series1.dataY.Add(36.4f);
-        series1.dataY.Add(45.9f);
-        series1.dataY.Add(87.4f);*/
 
         series2 = new E2ChartData.Series();
         series2.name = "Egoist Slimes";
         series2.dataY = new List<float>();
         series2.dataY.Add(0);
-        /*series2.dataY.Add(36.5f);
-        series2.dataY.Add(98.3f);
-        series2.dataY.Add(99.7f);
-        series2.dataY.Add(36.2f);
-        series2.dataY.Add(78.9f);*/
+
+        series3 = new E2ChartData.Series();
+        series3.name = "Corrupted";
+        series3.dataY = new List<float>();
+        series3.dataY.Add(0);
 
         //add series into series list
         myChart.chartData.series = new List<E2ChartData.Series>();
         myChart.chartData.series.Add(series1);
         myChart.chartData.series.Add(series2);
+        myChart.chartData.series.Add(series3);
         //myChart.chartData.series.Add(series2);
 
         //update chart
         myChart.UpdateChart();
     }
 
-    public void AddDataToChart(int altruistPopulationAmount, int egoistPopulationAmount)
+    public void AddDataToChart(int altruistPopulationAmount, int egoistPopulationAmount, int corruptedPopulationAmount)
     {
         day++;
         series1.dataY.Add(altruistPopulationAmount);
         series2.dataY.Add(egoistPopulationAmount);
+        series3.dataY.Add(corruptedPopulationAmount);
         myChart.chartData.categoriesX.Add("Δενό" + day);
 
         myChart.UpdateChart();

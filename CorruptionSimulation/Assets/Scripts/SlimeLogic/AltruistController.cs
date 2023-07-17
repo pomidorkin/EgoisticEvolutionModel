@@ -6,8 +6,10 @@ public class AltruistController : MonoBehaviour
 {
     [SerializeField] GameObject altruistSlimePrefab;
     [SerializeField] GameObject egoistSlimePrefab;
+    [SerializeField] GameObject corruptedSlimePrefab;
     [SerializeField] PositionManager positionManager;
     [SerializeField] ChartController chartController;
+    [SerializeField] public ResourceManager resourceManager;
     public List<SlimeParent> altruistSlimes;
     private bool allHunted = false;
     private bool allAte = false;
@@ -16,6 +18,7 @@ public class AltruistController : MonoBehaviour
     private int coffers = 0;
     public int newAltruistSlimesAmount = 0;
     public int newEgoistSlimesAmount = 0;
+    public int newCorruptedSlimesAmount = 0;
 
     [SerializeField] private int numberOfIterations = 20;
     private int iterationIndex = 0;
@@ -110,39 +113,51 @@ public class AltruistController : MonoBehaviour
         // Interation end
         if (allTriedReproduce && (iterationIndex < numberOfIterations))
         {
+            
+            allAte = false;
+            allHunted = false;
+            allTriedReproduce = false;
+            SpawnNewSlime();
+
             int altruistSlimeCount = 0;
             int egoistSlimes = 0;
+            int corruptedSlimes = 0;
             foreach (SlimeParent item in altruistSlimes)
             {
                 if (item.altruist)
                 {
                     altruistSlimeCount++;
                 }
-                else
+                else if(!item.altruist && !item.currupted)
                 {
                     egoistSlimes++;
                 }
+                else
+                {
+                    corruptedSlimes++;
+                }
             }
-            chartController.AddDataToChart(altruistSlimeCount, egoistSlimes);
-            allAte = false;
-            allHunted = false;
-            allTriedReproduce = false;
-            SpawnNewSlime();
+            chartController.AddDataToChart(altruistSlimeCount, egoistSlimes, corruptedSlimes);
+
             ResetCommand();
             SendHuntCommand();
         }
 
     }
 
-    public void IncreaseSpawningAmount(bool altruist)
+    public void IncreaseSpawningAmount(bool altruist, bool corrupted)
     {
         if (altruist)
         {
             newAltruistSlimesAmount += 1;
         }
-        else
+        else if (!altruist && ! corrupted)
         {
             newEgoistSlimesAmount += 1;
+        }
+        else
+        {
+            newCorruptedSlimesAmount += 1;
         }
     }
 
@@ -158,8 +173,13 @@ public class AltruistController : MonoBehaviour
             {
                 Instantiate(egoistSlimePrefab, positionManager.GetRandomSpawnPosition(), Quaternion.identity);
             }
+            for (int i = 0; i < newCorruptedSlimesAmount; i++)
+            {
+                Instantiate(corruptedSlimePrefab, positionManager.GetRandomSpawnPosition(), Quaternion.identity);
+            }
             newEgoistSlimesAmount = 0;
             newAltruistSlimesAmount = 0;
+            newCorruptedSlimesAmount = 0;
         }
     }
 
@@ -170,7 +190,10 @@ public class AltruistController : MonoBehaviour
 
     public void AddToCoffers(int amount)
     {
-        coffers += amount;
+        if (!resourceManager.MaxResReached())
+        {
+            coffers += amount;
+        }
     }
 
     public bool TakeFromCoffers(int amount)
